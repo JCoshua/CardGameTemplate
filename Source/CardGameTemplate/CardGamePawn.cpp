@@ -36,7 +36,7 @@ void ACardGamePawn::DrawCard(int drawAmount)
 	for (int i = 0; i < drawAmount; i++)
 	{
 		Hand.Add(GetDeck()[0]);
-		GetDeck().RemoveSingle(GetDeck()[0]);
+		Deck->Deck.RemoveSingle(GetDeck()[0]);
 	}
 }
 
