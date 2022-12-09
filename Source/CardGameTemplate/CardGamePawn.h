@@ -14,6 +14,8 @@ class CARDGAMETEMPLATE_API ACardGamePawn : public APawn
 	GENERATED_BODY()
 
 public:
+	ACardGamePawn();
+
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
@@ -24,6 +26,8 @@ public:
 	TArray<ACard*> GetDeck();
 
 	void DrawCard(int drawAmount = 1);
+
+	void SortHandLocation();
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -37,4 +41,7 @@ public:
 
 	UPROPERTY(EditInstanceOnly, BlueprintReadWrite)
 	ACard* CardSelected;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Camera, meta=(AllowPrivateAccess="true"))
+	class UCameraComponent* Camera;
 };

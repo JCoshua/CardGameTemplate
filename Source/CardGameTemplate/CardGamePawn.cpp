@@ -3,13 +3,24 @@
 
 #include "CardGamePawn.h"
 #include "DeckZone.h"
+#include "Card.h"
+#include <Camera/CameraComponent.h>
+#include <GameFramework/SpringArmComponent.h>
+
+
+ACardGamePawn::ACardGamePawn()
+{
+	//Create the camera
+	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Player Camera"));
+	Camera->SetupAttachment(RootComponent);
+}
 
 // Called when the game starts or when spawned
 void ACardGamePawn::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	DrawCard();
+	DrawCard(5);
 }
 
 // Called every frame
@@ -35,8 +46,28 @@ void ACardGamePawn::DrawCard(int drawAmount)
 {
 	for (int i = 0; i < drawAmount; i++)
 	{
-		Hand.Add(GetDeck()[0]);
-		Deck->Deck.RemoveSingle(GetDeck()[0]);
+		ACard* drawnCard = GetDeck()[0];
+
+		Hand.Add(drawnCard);
+		Deck->Deck.RemoveSingle(drawnCard);
+
+		SortHandLocation();
+	}
+}
+
+void ACardGamePawn::SortHandLocation()
+{
+	for (int i = 0; i < Hand.Num(); i++)
+	{
+		Hand[i]->SetActorScale3D({0.75f, 0.5f, 0.005f});
+		Hand[i]->SetActorRotation({ 80.0f, 0.0f, 0.0f});
+		
+		float cardYLocation = -37.5f - ((55.0f * Hand.Num()) / 2);
+		cardYLocation += 55.0f * i;
+
+		FVector forward = Camera->GetForwardVector() * FVector(200.0f, 0.0f, 450.0f);
+		forward.Y = cardYLocation;
+		Hand[i]->SetActorLocation(Camera->GetComponentLocation() + forward);
 	}
 }
 
