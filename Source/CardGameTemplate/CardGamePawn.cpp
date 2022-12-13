@@ -20,7 +20,7 @@ void ACardGamePawn::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	DrawCard(5);
+	DrawCard();
 }
 
 // Called every frame
@@ -57,13 +57,14 @@ void ACardGamePawn::DrawCard(int drawAmount)
 
 void ACardGamePawn::SortHandLocation()
 {
-	for (int i = 0; i < Hand.Num(); i++)
+	int handSize = Hand.Num();
+	for (int i = 0; i < handSize; i++)
 	{
 		Hand[i]->SetActorScale3D({0.75f, 0.5f, 0.005f});
 		Hand[i]->SetActorRotation({ 80.0f, 0.0f, 0.0f});
 		
-		float cardYLocation = -37.5f - ((55.0f * Hand.Num()) / 2);
-		cardYLocation += 55.0f * i;
+		float cardYLocation = (-75.0f + (handSize * 5)) + ((55.0f * handSize) / 2);
+		cardYLocation -= (55.0f - (handSize * 0.25f)) * i;
 
 		FVector forward = Camera->GetForwardVector() * FVector(200.0f, 0.0f, 450.0f);
 		forward.Y = cardYLocation;
