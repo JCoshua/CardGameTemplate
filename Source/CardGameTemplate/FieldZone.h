@@ -24,6 +24,6 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	UPROPERTY(EditAnywhere)
-	class ACard* Deck;
+	class ACard* Card;
 	class UStaticMeshComponent* mesh;
 };
