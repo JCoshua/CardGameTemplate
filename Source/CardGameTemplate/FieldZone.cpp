@@ -2,6 +2,7 @@
 
 
 #include "FieldZone.h"
+#include "Card.h"
 
 // Sets default values
 AFieldZone::AFieldZone()
@@ -30,5 +31,18 @@ void AFieldZone::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+}
+
+bool AFieldZone::PlaceCard(ACard* cardToPlace)
+{
+	if(Card)
+		return false;
+
+	Card = cardToPlace;
+	Card->SetActorLocation(GetActorLocation() + FVector(0.0f, 0.0f, 1.0f));
+	Card->SetActorScale3D(Card->GetActorScale3D() * 2);
+	Card->SetActorRotation({ 0.0f, 0.0f, 0.0f });
+
+	return true;
 }
 

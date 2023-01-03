@@ -6,9 +6,9 @@
 #include "GameFramework/GameModeBase.h"
 #include "CardSystemManager.generated.h"
 
-/**
- * 
- */
+class ACardGamePawn;
+class AFieldZone;
+
 UCLASS()
 class CARDGAMETEMPLATE_API ACardSystemManager : public AGameModeBase
 {
@@ -18,4 +18,11 @@ public:
 	ACardSystemManager();
 
 	virtual void StartPlay() override;
+	void InitField();
+	void InitCamera();
+	void CreateDecks();
+
+	ACardGamePawn* playerOne;
+	ACardGamePawn* playerTwo;
+	TArray<TArray<AFieldZone*>> fieldMap;
 };

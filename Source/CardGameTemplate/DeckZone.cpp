@@ -32,7 +32,6 @@ void ADeckZone::BeginPlay()
 void ADeckZone::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	ACard* newCard = NewObject<ACard>(this);
 }
 
 void ADeckZone::Shuffle()

@@ -6,6 +6,8 @@
 #include "GameFramework/Actor.h"
 #include "FieldZone.generated.h"
 
+class ACard;
+
 UCLASS()
 class CARDGAMETEMPLATE_API AFieldZone : public AActor
 {
@@ -22,8 +24,9 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+	bool PlaceCard(ACard* cardToPlace);
 
 	UPROPERTY(EditAnywhere)
-	class ACard* Card;
+	ACard* Card;
 	class UStaticMeshComponent* mesh;
 };

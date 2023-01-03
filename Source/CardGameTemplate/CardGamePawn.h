@@ -28,6 +28,12 @@ public:
 	void DrawCard(int drawAmount = 1);
 
 	void SortHandLocation();
+
+	void TraceForActor(const FVector& Start, const FVector& End, bool bDrawDebugHelpers);
+
+	void PlaceCard(class AFieldZone* zone);
+
+	void OnMouseClick();
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -37,7 +43,10 @@ public:
 	TArray<ACard*> Hand;
 
 	UPROPERTY(EditInstanceOnly, BlueprintReadWrite)
-	ACard* CardSelected;
+	AActor* CurrentTracedActor;
+
+	UPROPERTY(EditInstanceOnly, BlueprintReadWrite)
+	ACard* SelectedCard;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Camera, meta=(AllowPrivateAccess="true"))
 	class UCameraComponent* Camera;
