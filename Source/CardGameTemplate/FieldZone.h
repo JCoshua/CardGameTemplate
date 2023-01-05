@@ -28,5 +28,8 @@ public:
 
 	UPROPERTY(EditAnywhere)
 	ACard* Card;
+
+	UPROPERTY(EditAnywhere)
+	class ACardGamePawn* zoneOwner;
 	class UStaticMeshComponent* mesh;
 };

@@ -2,6 +2,7 @@
 
 
 #include "FieldZone.h"
+#include "CardGamePawn.h"
 #include "Card.h"
 
 // Sets default values
@@ -36,6 +37,9 @@ void AFieldZone::Tick(float DeltaTime)
 bool AFieldZone::PlaceCard(ACard* cardToPlace)
 {
 	if(Card)
+		return false;
+
+	if (!zoneOwner->Hand.Contains(cardToPlace))
 		return false;
 
 	Card = cardToPlace;

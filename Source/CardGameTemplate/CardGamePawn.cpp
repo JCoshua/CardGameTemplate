@@ -3,6 +3,7 @@
 
 #include "CardGamePawn.h"
 #include "HeadMountedDisplayFunctionLibrary.h"
+#include "CardGameManager.h"
 #include "DeckZone.h"
 #include "FieldZone.h"
 #include "Card.h"
@@ -78,6 +79,9 @@ TArray<ACard*> ACardGamePawn::GetDeck()
 
 void ACardGamePawn::DrawCard(int drawAmount)
 {
+	if (GetDeck().Num() <= 0)
+		return;
+
 	for (int i = 0; i < drawAmount; i++)
 	{
 		ACard* drawnCard = GetDeck()[0];
@@ -125,7 +129,7 @@ void ACardGamePawn::TraceForActor(const FVector & Start, const FVector & End, bo
 
 void ACardGamePawn::PlaceCard(AFieldZone* zone)
 {
-	if (!SelectedCard || !zone)
+	if (!zone)
 		return;
 
 	if (zone->PlaceCard(SelectedCard))
@@ -134,11 +138,15 @@ void ACardGamePawn::PlaceCard(AFieldZone* zone)
 		SelectedCard = nullptr;
 
 		SortHandLocation();
+		readyForTurnEnd = true;
 	}
 }
 
 void ACardGamePawn::OnMouseClick()
 {
+	if (!isTurnPlayer)
+		return;
+
 	if (SelectedCard)
 	{
 		AFieldZone* tracedZone = Cast<AFieldZone>(CurrentTracedActor);

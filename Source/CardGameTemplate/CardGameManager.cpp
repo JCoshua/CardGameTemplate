@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "CardSystemManager.h"
+#include "CardGameManager.h"
 #include "CardGameTemplatePlayerController.h"
 #include <Camera/CameraComponent.h>
 #include "CardGameTemplatePawn.h"
@@ -10,16 +10,24 @@
 #include "DeckZone.h"
 #include "Card.h"
 
-ACardSystemManager::ACardSystemManager()
+
+// Sets default values for this component's properties
+UCardGameManager::UCardGameManager()
 {
-	// no pawn by default
-	DefaultPawnClass = ACardGameTemplatePawn::StaticClass();
-	// use our own player controller class
-	PlayerControllerClass = ACardGameTemplatePlayerController::StaticClass();
+	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
+	// off to improve performance if you don't need them.
+	PrimaryComponentTick.bCanEverTick = true;
+
+	// ...
 }
 
-void ACardSystemManager::StartPlay()
+
+// Called when the game starts
+void UCardGameManager::BeginPlay()
 {
+	Super::BeginPlay();
+
+	// ...
 	UWorld* world = GetWorld();
 
 
@@ -27,7 +35,6 @@ void ACardSystemManager::StartPlay()
 	playerTwo = world->SpawnActor<ACardGamePawn>();
 	playerOne->AutoPossessPlayer = EAutoReceiveInput::Player0;
 	playerTwo->AutoPossessPlayer = EAutoReceiveInput::Player1;
-	world->GetFirstPlayerController()->Possess(playerOne);
 	InitField();
 	CreateDecks();
 	InitCamera();
@@ -35,10 +42,53 @@ void ACardSystemManager::StartPlay()
 	playerOne->DrawCard(5);
 	playerTwo->DrawCard(5);
 
-	Super::StartPlay();
+	if (rand() % 2 == 0)
+		currentPlayer = playerOne;
+	else
+		currentPlayer = playerTwo;
+	world->GetFirstPlayerController()->Possess(currentPlayer);
+	currentPlayer->isTurnPlayer = true;
 }
 
-void ACardSystemManager::InitField()
+
+// Called every frame
+void UCardGameManager::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
+{
+	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
+	UWorld* world = GetWorld();
+
+	// ...
+	switch (currentPhase)
+	{
+	case UTurnPhases::DRAWPHASE:
+		currentPlayer->DrawCard(cardDrawnPerTurn);
+		currentPhase = UTurnPhases::MAINPHASE;
+		break;
+	case UTurnPhases::MAINPHASE:
+		if (currentPlayer->readyForTurnEnd)
+		{
+			currentPhase = UTurnPhases::ENDPHASE;
+			currentPlayer->readyForTurnEnd = false;
+		}
+		break;
+	case UTurnPhases::ENDPHASE:
+		currentPlayer->isTurnPlayer = false;
+		if (currentPlayer == playerOne)
+			currentPlayer = playerTwo;
+		else
+			currentPlayer = playerOne;
+		currentPlayer->isTurnPlayer = true;
+
+		world->GetFirstPlayerController()->UnPossess();
+		world->GetFirstPlayerController()->Possess(currentPlayer);
+		currentPhase = UTurnPhases::DRAWPHASE;
+		break;
+	default:
+		break;
+	}
+}
+
+void UCardGameManager::InitField()
 {
 	/// <summary>
 	/// A 2D Map for the game field as viewed from Player 2's perspective.
@@ -90,14 +140,14 @@ void ACardSystemManager::InitField()
 		}
 		fieldMap.Add(row);
 	}
-		
-	
+
+
 	ADeckZone* playerTwoDeck = world->SpawnActor<ADeckZone>();
 	playerTwoDeck->SetActorLocation(FVector((fieldMap.Num() - 1.0f) * 150.0f, -150.0f + (fieldMap[0].Num() * -150.0f), 0));
 	playerTwo->Deck = playerTwoDeck;
 }
 
-void ACardSystemManager::InitCamera()
+void UCardGameManager::InitCamera()
 {
 	playerOne->SetActorLocation(FVector(-750.0f, -50.0f + (fieldMap[0].Num() / 2.0f) * -150.0f, 700));
 	playerOne->SetActorRotation(FRotator(330.0f, 0.0f, 0.0f));
@@ -106,7 +156,7 @@ void ACardSystemManager::InitCamera()
 	playerTwo->SetActorRotation(FRotator(330.0f, 180.0f, 0.0f));
 }
 
-void ACardSystemManager::CreateDecks()
+void UCardGameManager::CreateDecks()
 {
 	UWorld* world = GetWorld();
 
@@ -122,3 +172,4 @@ void ACardSystemManager::CreateDecks()
 	playerOne->Deck->Shuffle();
 	playerTwo->Deck->Shuffle();
 }
+

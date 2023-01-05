@@ -53,4 +53,9 @@ public:
 	
 	UPROPERTY(EditAnywhere)
 	class ADeckZone* Deck;
+
+	// Tells the pawn if it can play
+	bool isTurnPlayer = false;
+	// Tells the Manager to end turn
+	bool readyForTurnEnd = false;
 };
