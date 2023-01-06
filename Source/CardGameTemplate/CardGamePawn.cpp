@@ -163,3 +163,11 @@ void ACardGamePawn::OnMouseClick()
 	if (tracedCard && Hand.Contains(tracedCard))
 		SelectedCard = tracedCard;
 }
+
+bool ACardGamePawn::hasSelectedCard()
+{
+	if (SelectedCard)
+		return true;
+
+	return false;
+}

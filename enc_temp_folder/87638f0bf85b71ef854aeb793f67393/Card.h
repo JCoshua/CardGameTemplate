@@ -63,9 +63,6 @@ public:
 
 	UPROPERTY(BlueprintReadOnly)
 	ECardLocation location;
-
-	UPROPERTY(BlueprintReadOnly)
-	class CardDataAsset* cardData;
 private:
 	/// <summary>
 	/// Actions performed when this card is added to the hand.

@@ -29,12 +29,48 @@ void ACard::BeginPlay()
 void ACard::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 }
 
-void ACard::Initialize()
+void ACard::CardAdded()
 {
-	
-	
+	onCardAdded();
+
+	location = ECardLocation::Hand;
 }
+
+void ACard::CardUsed()
+{
+	onCardUsed();
+}
+
+void ACard::CardRemoved()
+{
+	onCardRemoved();
+
+	location = ECardLocation::DiscardPile;
+}
+
+void ACard::CardPlaced()
+{
+	onCardPlaced();
+
+	location = ECardLocation::Field;
+}
+
+void ACard::onCardAdded()
+{
+}
+
+void ACard::onCardUsed()
+{
+}
+
+void ACard::onCardRemoved()
+{
+}
+
+void ACard::onCardPlaced()
+{
+}
+
 

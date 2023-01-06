@@ -34,6 +34,9 @@ public:
 	void PlaceCard(class AFieldZone* zone);
 
 	void OnMouseClick();
+
+	UFUNCTION(BlueprintCallable)
+	bool hasSelectedCard();
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -55,6 +58,7 @@ public:
 	class ADeckZone* Deck;
 
 	// Tells the pawn if it can play
+	UPROPERTY(EditInstanceOnly, BlueprintReadWrite)
 	bool isTurnPlayer = false;
 	// Tells the Manager to end turn
 	bool readyForTurnEnd = false;
