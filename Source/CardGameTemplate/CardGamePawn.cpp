@@ -90,6 +90,7 @@ void ACardGamePawn::DrawCard(int drawAmount)
 		Deck->Deck.RemoveSingle(drawnCard);
 
 		SortHandLocation();
+		drawnCard->CardAdded();
 	}
 }
 
@@ -138,6 +139,7 @@ void ACardGamePawn::PlaceCard(AFieldZone* zone)
 		SelectedCard = nullptr;
 
 		SortHandLocation();
+		SelectedCard->CardPlaced();
 		readyForTurnEnd = true;
 	}
 }
@@ -167,7 +169,10 @@ void ACardGamePawn::OnMouseClick()
 bool ACardGamePawn::hasSelectedCard()
 {
 	if (SelectedCard)
+	{
+		//GEngine->AddOnScreenDebugMessage(-1, 5, FColor::Green, TEXT("Something has opened."));
 		return true;
+	}
 
 	return false;
 }

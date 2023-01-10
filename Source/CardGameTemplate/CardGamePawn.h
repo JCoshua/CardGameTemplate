@@ -31,6 +31,7 @@ public:
 
 	void TraceForActor(const FVector& Start, const FVector& End, bool bDrawDebugHelpers);
 
+	UFUNCTION(BlueprintCallable)
 	void PlaceCard(class AFieldZone* zone);
 
 	void OnMouseClick();

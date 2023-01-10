@@ -3,6 +3,7 @@
 
 #include "Card.h"
 #include <Components/StaticMeshComponent.h>
+#include "PrimaryCardDataAsset.h"
 
 // Sets default values
 ACard::ACard()

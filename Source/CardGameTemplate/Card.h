@@ -37,22 +37,22 @@ public:
 	/// <summary>
 	/// Actions all cards perform when they are added to the hand.
 	/// </summary>
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 	void CardAdded();
 	/// <summary>
 	/// Actions all cards performed when they are 'used'.
 	/// </summary>
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 	void CardUsed();
 	/// <summary>
 	/// Actions all cards perform when they are removed from the field/discarded.
 	/// </summary>
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 	void CardRemoved();
 	/// <summary>
 	/// Actions all cards perform when they are placed on the field.
 	/// </summary>
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 	void CardPlaced();
 
 	UPROPERTY(EditAnywhere)
@@ -64,8 +64,8 @@ public:
 	UPROPERTY(BlueprintReadOnly)
 	ECardLocation location;
 
-	UPROPERTY(BlueprintReadOnly)
-	class CardDataAsset* cardData;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	class UPrimaryCardDataAsset* cardData;
 private:
 	/// <summary>
 	/// Actions performed when this card is added to the hand.
