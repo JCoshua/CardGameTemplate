@@ -2,7 +2,6 @@
 
 
 #include "InventoryComponent.h"
-#include "InventorySlotAsset.h"
 #include "PrimaryCardDataAsset.h"
 
 // Sets default values for this component's properties
@@ -34,3 +33,13 @@ void UInventoryComponent::TickComponent(float DeltaTime, ELevelTick TickType, FA
 	// ...
 }
 
+void UInventoryComponent::AddCardToInventory(UPrimaryCardDataAsset* card, int cardCount)
+{
+	for (int i = 0; i < cardCount; i++)
+		inventoryArray.Add(card);
+}
+
+void UInventoryComponent::RemoveCardFromInventory(UPrimaryCardDataAsset* card)
+{
+	inventoryArray.RemoveSingle(card);
+}

@@ -4,18 +4,18 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
-#include "InventoryComponent.generated.h"
+#include "PlayerDeckComponent.generated.h"
 
 class UPrimaryCardDataAsset;
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
-class CARDGAMETEMPLATE_API UInventoryComponent : public UActorComponent
+class CARDGAMETEMPLATE_API UPlayerDeckComponent : public UActorComponent
 {
 	GENERATED_BODY()
 
 public:	
 	// Sets default values for this component's properties
-	UInventoryComponent();
+	UPlayerDeckComponent();
 
 protected:
 	// Called when the game starts
@@ -26,16 +26,17 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 	UFUNCTION(BlueprintCallable)
-	void AddCardToInventory(UPrimaryCardDataAsset* card, int cardCount = 1);
+	void AddCardToDeck(class UPrimaryCardDataAsset* card);
+
 	UFUNCTION(BlueprintCallable)
-	void RemoveCardFromInventory(UPrimaryCardDataAsset* card);
+	void RemoveCardFromDeck(class UPrimaryCardDataAsset* card);
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	TArray<UPrimaryCardDataAsset*> inventoryArray;
+	TArray<UPrimaryCardDataAsset*> DeckArray;
 
 	/// <summary>
-	/// Tells the Menu to update the Inventory UI
+	/// Tells the Menu to update the Deck UI
 	/// </summary>
 	UPROPERTY(BlueprintReadWrite)
-	bool updateInventory;
+	bool updateDeck;
 };
