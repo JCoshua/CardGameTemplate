@@ -3,12 +3,12 @@
 
 #include "CardGamePawn.h"
 #include "HeadMountedDisplayFunctionLibrary.h"
-#include "CardGameManager.h"
-#include "DeckZone.h"
-#include "FieldZone.h"
-#include "Card.h"
 #include <Camera/CameraComponent.h>
 #include "DrawDebugHelpers.h"
+#include "CardGameManager.h"
+#include "FieldZone.h"
+#include "DeckZone.h"
+#include "Card.h"
 
 ACardGamePawn::ACardGamePawn()
 {
@@ -72,9 +72,11 @@ void ACardGamePawn::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 	PlayerInputComponent->BindAction("TriggerClick", EInputEvent::IE_Pressed, this, &ACardGamePawn::OnMouseClick);
 }
 
+
+
 TArray<ACard*> ACardGamePawn::GetDeck()
 {
-	return Deck->Deck;
+	return TArray<ACard*>();
 }
 
 void ACardGamePawn::DrawCard(int drawAmount)

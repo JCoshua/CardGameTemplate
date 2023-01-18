@@ -43,8 +43,9 @@ protected:
 	virtual void BeginPlay() override;
 
 public:
-	UPROPERTY(VisibleAnywhere)
+
 	TArray<ACard*> Hand;
+	class ADeckZone* Deck;
 
 	UPROPERTY(EditInstanceOnly, BlueprintReadWrite)
 	AActor* CurrentTracedActor;
@@ -55,8 +56,7 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Camera, meta=(AllowPrivateAccess="true"))
 	class UCameraComponent* Camera;
 	
-	UPROPERTY(EditAnywhere)
-	class ADeckZone* Deck;
+	
 
 	// Tells the pawn if it can play
 	UPROPERTY(EditInstanceOnly, BlueprintReadWrite)

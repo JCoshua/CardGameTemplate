@@ -2,36 +2,15 @@
 
 
 #include "DeckZone.h"
+#include "CardGamePawn.h"
 #include "Card.h"
-#include <Components/StaticMeshComponent.h>
 
-// Sets default values
-ADeckZone::ADeckZone()
+void ADeckZone::initDeck()
 {
-	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
+	if (!zoneOwner)
+		return;
 
-	static ConstructorHelpers::FObjectFinder<UStaticMesh>MeshAsset(TEXT("StaticMesh'/Engine/BasicShapes/Cube.Cube'"));
-	UStaticMesh* Asset = MeshAsset.Object;
 
-	mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
-	mesh->SetStaticMesh(Asset);
-	mesh->SetRelativeScale3D({ 1.5f, 1.5f, 0.01f });
-	mesh->SetupAttachment(RootComponent);
-}
-
-// Called when the game starts or when spawned
-void ADeckZone::BeginPlay()
-{
-	Super::BeginPlay();
-
-	Shuffle();
-}
-
-// Called every frame
-void ADeckZone::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
 }
 
 void ADeckZone::Shuffle()
@@ -56,3 +35,9 @@ void ADeckZone::Shuffle()
 	}
 }
 
+void ADeckZone::BeginPlay()
+{
+	Super::BeginPlay();
+
+	zoneOwner->Deck = this;
+}

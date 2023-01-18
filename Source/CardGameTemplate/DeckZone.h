@@ -3,31 +3,25 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/Actor.h"
+#include "PlayZone.h"
 #include "DeckZone.generated.h"
 
-class ACard;
-
+/**
+ * 
+ */
 UCLASS()
-class CARDGAMETEMPLATE_API ADeckZone : public AActor
+class CARDGAMETEMPLATE_API ADeckZone : public APlayZone
 {
 	GENERATED_BODY()
 	
-public:	
-	// Sets default values for this actor's properties
-	ADeckZone();
+public:
+	void initDeck();
+	void Shuffle();
+
+	UPROPERTY(EditAnywhere)
+	TArray<class ACard*> Deck;
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-
-public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
-
-	void Shuffle();
-
-	UPROPERTY(EditAnywhere)
-	TArray<ACard*> Deck;
-	class UStaticMeshComponent* mesh;
 };

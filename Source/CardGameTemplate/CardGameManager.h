@@ -39,9 +39,10 @@ public:
 	void InitCamera();
 	void CreateDecks();
 
+	UPROPERTY(EditAnywhere)
 	ACardGamePawn* playerOne;
+	UPROPERTY(EditAnywhere)
 	ACardGamePawn* playerTwo;
-	TArray<TArray<AFieldZone*>> fieldMap;
 	UTurnPhases currentPhase;
 
 	ACardGamePawn* currentPlayer;

@@ -6,8 +6,6 @@
 #include <Camera/CameraComponent.h>
 #include "CardGameTemplatePawn.h"
 #include "CardGamePawn.h"
-#include "FieldZone.h"
-#include "DeckZone.h"
 #include "Card.h"
 
 
@@ -89,7 +87,7 @@ void UCardGameManager::TickComponent(float DeltaTime, ELevelTick TickType, FActo
 }
 
 void UCardGameManager::InitField()
-{
+{/*
 	/// <summary>
 	/// A 2D Map for the game field as viewed from Player 2's perspective.
 	/// 
@@ -144,32 +142,20 @@ void UCardGameManager::InitField()
 
 	ADeckZone* playerTwoDeck = world->SpawnActor<ADeckZone>();
 	playerTwoDeck->SetActorLocation(FVector((fieldMap.Num() - 1.0f) * 150.0f, -150.0f + (fieldMap[0].Num() * -150.0f), 0));
-	playerTwo->Deck = playerTwoDeck;
+	playerTwo->Deck = playerTwoDeck;*/
 }
 
 void UCardGameManager::InitCamera()
 {
-	playerOne->SetActorLocation(FVector(-750.0f, -50.0f + (fieldMap[0].Num() / 2.0f) * -150.0f, 700));
+	//playerOne->SetActorLocation(FVector(-750.0f, -50.0f + (fieldMap[0].Num() / 2.0f) * -150.0f, 700));
 	playerOne->SetActorRotation(FRotator(330.0f, 0.0f, 0.0f));
 
-	playerTwo->SetActorLocation(FVector(fieldMap.Num() * 150.0f + 500.0f, -50.0f + (fieldMap[0].Num() / 2.0f) * -150.0f, 700));
+	//playerTwo->SetActorLocation(FVector(fieldMap.Num() * 150.0f + 500.0f, -50.0f + (fieldMap[0].Num() / 2.0f) * -150.0f, 700));
 	playerTwo->SetActorRotation(FRotator(330.0f, 180.0f, 0.0f));
 }
 
 void UCardGameManager::CreateDecks()
 {
-	UWorld* world = GetWorld();
-
-	for (int i = 0; i < 10; i++)
-	{
-		ACard* playerOneCard = world->SpawnActor<ACard>();
-		playerOne->Deck->Deck.Add(playerOneCard);
-
-		ACard* playerTwoCard = world->SpawnActor<ACard>();
-		playerTwo->Deck->Deck.Add(playerTwoCard);
-	}
-
-	playerOne->Deck->Shuffle();
-	playerTwo->Deck->Shuffle();
+	
 }
 
