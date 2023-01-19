@@ -6,6 +6,8 @@
 #include <Camera/CameraComponent.h>
 #include "DrawDebugHelpers.h"
 #include "CardGameManager.h"
+#include "InventoryComponent.h"
+#include "PlayerDeckComponent.h"
 #include "FieldZone.h"
 #include "DeckZone.h"
 #include "Card.h"
@@ -15,6 +17,12 @@ ACardGamePawn::ACardGamePawn()
 	//Create the camera
 	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Player Camera"));
 	Camera->SetupAttachment(RootComponent);
+
+	CardInventory = CreateDefaultSubobject<UInventoryComponent>(TEXT("Inventory"));
+	AddOwnedComponent(CardInventory);
+
+	DeckComponent = CreateDefaultSubobject<UPlayerDeckComponent>(TEXT("DeckComponent"));
+	AddOwnedComponent(DeckComponent);
 }
 
 // Called when the game starts or when spawned
@@ -76,20 +84,20 @@ void ACardGamePawn::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 
 TArray<ACard*> ACardGamePawn::GetDeck()
 {
-	return TArray<ACard*>();
+	return DeckZone->Deck;
 }
 
 void ACardGamePawn::DrawCard(int drawAmount)
 {
-	if (GetDeck().Num() <= 0)
-		return;
-
 	for (int i = 0; i < drawAmount; i++)
 	{
+		if (GetDeck().Num() <= 0)
+			return;
+
 		ACard* drawnCard = GetDeck()[0];
 
 		Hand.Add(drawnCard);
-		Deck->Deck.RemoveSingle(drawnCard);
+		DeckZone->Deck.RemoveSingle(drawnCard);
 
 		SortHandLocation();
 		drawnCard->CardAdded();

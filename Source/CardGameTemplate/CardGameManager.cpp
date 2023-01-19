@@ -6,6 +6,7 @@
 #include <Camera/CameraComponent.h>
 #include "CardGameTemplatePawn.h"
 #include "CardGamePawn.h"
+#include "DeckZone.h"
 #include "Card.h"
 
 
@@ -28,24 +29,8 @@ void UCardGameManager::BeginPlay()
 	// ...
 	UWorld* world = GetWorld();
 
-
-	playerOne = world->SpawnActor<ACardGamePawn>();
-	playerTwo = world->SpawnActor<ACardGamePawn>();
 	playerOne->AutoPossessPlayer = EAutoReceiveInput::Player0;
-	playerTwo->AutoPossessPlayer = EAutoReceiveInput::Player1;
-	InitField();
-	CreateDecks();
-	InitCamera();
-
-	playerOne->DrawCard(5);
-	playerTwo->DrawCard(5);
-
-	if (rand() % 2 == 0)
-		currentPlayer = playerOne;
-	else
-		currentPlayer = playerTwo;
-	world->GetFirstPlayerController()->Possess(currentPlayer);
-	currentPlayer->isTurnPlayer = true;
+	world->GetFirstPlayerController()->Possess(playerOne);
 }
 
 
@@ -53,6 +38,10 @@ void UCardGameManager::BeginPlay()
 void UCardGameManager::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
+
+	if (!gameStart)
+		return;
+
 	UWorld* world = GetWorld();
 
 	// ...
@@ -86,76 +75,29 @@ void UCardGameManager::TickComponent(float DeltaTime, ELevelTick TickType, FActo
 	}
 }
 
-void UCardGameManager::InitField()
-{/*
-	/// <summary>
-	/// A 2D Map for the game field as viewed from Player 2's perspective.
-	/// 
-	/// Key:
-	/// 0 - Inaccessable Zone
-	/// 1 - Player 1's Zone
-	/// 2 - Player 2's Zone
-	/// </summary>
-	TArray<TArray<int>> grid =
-	{
-		{1,1,1,1,1},
-		{1,1,1,1,1},
-		{0,0,0,0,0},
-		{2,2,2,2,2},
-		{2,2,2,2,2}
-	};
-
+void UCardGameManager::InitializeGame()
+{
 	UWorld* world = GetWorld();
+	playerOne->AutoPossessPlayer = EAutoReceiveInput::Player0;
+	playerTwo->AutoPossessPlayer = EAutoReceiveInput::Player1;
+	InitializeDecks();
 
-	ADeckZone* playerOneDeck = world->SpawnActor<ADeckZone>();
-	playerOne->Deck = playerOneDeck;
+	playerOne->DrawCard(5);
+	playerTwo->DrawCard(5);
 
-	for (int x = 0; x < grid.Num(); x++)
-	{
-		TArray<AFieldZone*> row;
+	if (rand() % 2 == 0)
+		currentPlayer = playerOne;
+	else
+		currentPlayer = playerTwo;
+	world->GetFirstPlayerController()->Possess(currentPlayer);
+	currentPlayer->isTurnPlayer = true;
 
-		for (int y = 0; y < grid[0].Num(); y++)
-		{
-			if (grid[x][y] == 1)
-			{
-				AFieldZone* zone = world->SpawnActor<AFieldZone>();
-				zone->zoneOwner = playerOne;
-				float xPos = x * 150.0f;
-				float yPos = -150.0f + (y * -150.0f);
-				zone->SetActorLocation(FVector(xPos, yPos, 0));
-				row.Add(zone);
-			}
-
-			else if (grid[x][y] == 2)
-			{
-				AFieldZone* zone = world->SpawnActor<AFieldZone>();
-				zone->zoneOwner = playerTwo;
-				float xPos = x * 150.0f;
-				float yPos = -150.0f + (y * -150.0f);
-				zone->SetActorLocation(FVector(xPos, yPos, 0));
-				row.Add(zone);
-			}
-		}
-		fieldMap.Add(row);
-	}
-
-
-	ADeckZone* playerTwoDeck = world->SpawnActor<ADeckZone>();
-	playerTwoDeck->SetActorLocation(FVector((fieldMap.Num() - 1.0f) * 150.0f, -150.0f + (fieldMap[0].Num() * -150.0f), 0));
-	playerTwo->Deck = playerTwoDeck;*/
+	gameStart = true;
 }
 
-void UCardGameManager::InitCamera()
+void UCardGameManager::InitializeDecks()
 {
-	//playerOne->SetActorLocation(FVector(-750.0f, -50.0f + (fieldMap[0].Num() / 2.0f) * -150.0f, 700));
-	playerOne->SetActorRotation(FRotator(330.0f, 0.0f, 0.0f));
-
-	//playerTwo->SetActorLocation(FVector(fieldMap.Num() * 150.0f + 500.0f, -50.0f + (fieldMap[0].Num() / 2.0f) * -150.0f, 700));
-	playerTwo->SetActorRotation(FRotator(330.0f, 180.0f, 0.0f));
-}
-
-void UCardGameManager::CreateDecks()
-{
-	
+	playerOne->DeckZone->initDeck();
+	playerTwo->DeckZone->initDeck();
 }
 

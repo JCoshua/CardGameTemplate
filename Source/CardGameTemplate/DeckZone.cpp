@@ -3,6 +3,8 @@
 
 #include "DeckZone.h"
 #include "CardGamePawn.h"
+#include "PlayerDeckComponent.h"
+#include "PrimaryCardDataAsset.h"
 #include "Card.h"
 
 void ADeckZone::initDeck()
@@ -10,7 +12,17 @@ void ADeckZone::initDeck()
 	if (!zoneOwner)
 		return;
 
+	UWorld* world = GetWorld();
+	TArray<UPrimaryCardDataAsset*> ownerDeck = zoneOwner->DeckComponent->DeckArray;
 
+	for (int i = 0; i < ownerDeck.Num(); i++)
+	{
+		ACard* newCard = world->SpawnActor<ACard>();
+		newCard->cardData = ownerDeck[i];
+		Deck.Add(newCard);
+	}
+
+	Shuffle();
 }
 
 void ADeckZone::Shuffle()
@@ -21,7 +33,7 @@ void ADeckZone::Shuffle()
 	for (int i = 0; i < Deck.Num(); i++)
 	{
 		int index = i;
-		while (i == index)
+		while (i == index && Deck.Num() > 1)
 			index = rand() % Deck.Num();
 
 		Deck.Swap(i, index);
@@ -39,5 +51,5 @@ void ADeckZone::BeginPlay()
 {
 	Super::BeginPlay();
 
-	zoneOwner->Deck = this;
+	zoneOwner->DeckZone = this;
 }

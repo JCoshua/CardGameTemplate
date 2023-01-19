@@ -35,21 +35,27 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-	void InitField();
-	void InitCamera();
-	void CreateDecks();
+	UFUNCTION(BlueprintCallable)
+	void InitializeGame();
+	void InitializeDecks();
 
 	UPROPERTY(EditAnywhere)
 	ACardGamePawn* playerOne;
 	UPROPERTY(EditAnywhere)
 	ACardGamePawn* playerTwo;
-	UTurnPhases currentPhase;
-
+	/// <summary>
+	/// The Current Turn Player
+	/// </summary>
 	ACardGamePawn* currentPlayer;
+
+	UTurnPhases currentPhase;
 
 	/// <summary>
 	/// The number of cards drawn during the designated draw phase.
 	/// </summary>
 	UPROPERTY(EditAnywhere)
 	int cardDrawnPerTurn = 1;
+
+	UPROPERTY(BlueprintReadWrite)
+	bool gameStart = false;
 };

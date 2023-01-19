@@ -10,10 +10,14 @@ APlayZone::APlayZone()
 	PrimaryActorTick.bCanEverTick = true;
 
 	static ConstructorHelpers::FObjectFinder<UStaticMesh>MeshAsset(TEXT("StaticMesh'/Engine/BasicShapes/Cube.Cube'"));
+	static ConstructorHelpers::FObjectFinder<UMaterial>MaterialAsset(TEXT("Material'/Game/Geometry/Meshes/CubeMaterial.CubeMaterial'"));
+
 	UStaticMesh* Asset = MeshAsset.Object;
+	UMaterial* Material = MaterialAsset.Object;
 
 	mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
 	mesh->SetStaticMesh(Asset);
+	mesh->SetMaterial(0, Material);
 	mesh->SetRelativeScale3D({ 1.5f, 1.5f, 0.01f });
 	mesh->SetupAttachment(RootComponent);
 }

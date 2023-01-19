@@ -44,8 +44,11 @@ protected:
 
 public:
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Camera, meta=(AllowPrivateAccess="true"))
+	class UCameraComponent* Camera;
+
 	TArray<ACard*> Hand;
-	class ADeckZone* Deck;
+	class ADeckZone* DeckZone;
 
 	UPROPERTY(EditInstanceOnly, BlueprintReadWrite)
 	AActor* CurrentTracedActor;
@@ -53,11 +56,12 @@ public:
 	UPROPERTY(EditInstanceOnly, BlueprintReadWrite)
 	ACard* SelectedCard;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Camera, meta=(AllowPrivateAccess="true"))
-	class UCameraComponent* Camera;
-	
-	
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	class UInventoryComponent* CardInventory;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	class UPlayerDeckComponent* DeckComponent;
+	
 	// Tells the pawn if it can play
 	UPROPERTY(EditInstanceOnly, BlueprintReadWrite)
 	bool isTurnPlayer = false;
