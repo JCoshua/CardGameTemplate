@@ -4,6 +4,8 @@
 #include "Card.h"
 #include <Components/StaticMeshComponent.h>
 #include "PrimaryCardDataAsset.h"
+#include "CardGamePawn.h"
+#include "DiscardZone.h"
 
 // Sets default values
 ACard::ACard()
@@ -30,6 +32,8 @@ void ACard::BeginPlay()
 void ACard::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	if (cardData->Health <= 0)
+		cardOwner->DiscardZone->AddToPile(this);
 }
 
 void ACard::CardAdded()
@@ -58,6 +62,14 @@ void ACard::CardPlaced()
 	location = ECardLocation::Field;
 }
 
+void ACard::CardAttack(ACard* target)
+{
+	if (!target)
+		return;
+
+	cardData->BattleOpponent(target->cardData);
+}
+
 void ACard::onCardAdded()
 {
 }
@@ -71,6 +83,10 @@ void ACard::onCardRemoved()
 }
 
 void ACard::onCardPlaced()
+{
+}
+
+void ACard::onCardAttack()
 {
 }
 

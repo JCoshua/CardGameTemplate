@@ -27,5 +27,16 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Card Data Info")
 	bool cardUsable = true;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Card Data Info")
+	int Health = 1;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Card Data Info")
+	int Attack = 0;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Card Data Info")
+	int Defense = 0;
+
 	FPrimaryAssetId GetPrimaryAssetId() const override;
+
+	void BattleOpponent(UPrimaryCardDataAsset* target);
 };

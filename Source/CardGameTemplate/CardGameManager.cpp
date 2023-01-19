@@ -4,7 +4,6 @@
 #include "CardGameManager.h"
 #include "CardGameTemplatePlayerController.h"
 #include <Camera/CameraComponent.h>
-#include "CardGameTemplatePawn.h"
 #include "CardGamePawn.h"
 #include "DeckZone.h"
 #include "Card.h"

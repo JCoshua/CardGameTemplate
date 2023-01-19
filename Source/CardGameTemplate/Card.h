@@ -54,6 +54,11 @@ public:
 	/// </summary>
 	UFUNCTION(BlueprintCallable)
 	void CardPlaced();
+	/// <summary>
+	/// Actions all cards perform when they attack a target.
+	/// </summary>
+	UFUNCTION(BlueprintCallable)
+	void CardAttack(ACard* target);
 
 	UPROPERTY(EditAnywhere)
 	class UStaticMeshComponent* mesh;
@@ -83,4 +88,8 @@ private:
 	/// Actions performed when this card is placed on the field.
 	/// </summary>
 	virtual void onCardPlaced();
+	/// <summary>
+	/// Actions performed when this card attacks a target.
+	/// </summary>
+	virtual void onCardAttack();
 };

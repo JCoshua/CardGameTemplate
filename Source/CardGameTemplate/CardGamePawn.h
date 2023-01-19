@@ -50,6 +50,7 @@ public:
 
 	TArray<ACard*> Hand;
 	class ADeckZone* DeckZone;
+	class ADiscardZone* DiscardZone;
 
 	UPROPERTY(EditInstanceOnly, BlueprintReadWrite)
 	AActor* CurrentTracedActor;
