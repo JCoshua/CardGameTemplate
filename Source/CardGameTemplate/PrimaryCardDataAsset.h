@@ -24,7 +24,8 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Card Data Info")
 	FName cardName;
 
-
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Card Data Info")
+	bool cardUsable = true;
 
 	FPrimaryAssetId GetPrimaryAssetId() const override;
 };

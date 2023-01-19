@@ -19,6 +19,7 @@ void ADeckZone::initDeck()
 	{
 		ACard* newCard = world->SpawnActor<ACard>();
 		newCard->cardData = ownerDeck[i];
+		newCard->cardOwner = zoneOwner;
 		Deck.Add(newCard);
 	}
 

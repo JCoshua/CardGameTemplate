@@ -146,10 +146,10 @@ void ACardGamePawn::PlaceCard(AFieldZone* zone)
 	if (zone->PlaceCard(SelectedCard))
 	{
 		Hand.RemoveSingle(SelectedCard);
+		SelectedCard->CardPlaced();
 		SelectedCard = nullptr;
 
 		SortHandLocation();
-		SelectedCard->CardPlaced();
 		readyForTurnEnd = true;
 	}
 }
@@ -159,30 +159,74 @@ void ACardGamePawn::OnMouseClick()
 	if (!isTurnPlayer)
 		return;
 
-	if (SelectedCard)
-	{
-		AFieldZone* tracedZone = Cast<AFieldZone>(CurrentTracedActor);
 
-		if (tracedZone)
-		{
-			PlaceCard(tracedZone);
-			return;
-		}
-	}
+	//Cast as a Play Zone...
+	APlayZone* tracedZone = Cast<APlayZone>(CurrentTracedActor);
 
+	//Zone Interactables...
+
+	InteractWithTracedZone(tracedZone);
+
+
+	//Cast as a Card...
 	ACard* tracedCard = Cast<ACard>(CurrentTracedActor);
 
-	if (tracedCard && Hand.Contains(tracedCard))
+	//Card Interactables...
+
+	InteractWithTracedCard(tracedCard);
+}
+
+void ACardGamePawn::InteractWithTracedCard(ACard* tracedCard)
+{
+	if (!tracedCard)
+		return;
+
+	if (DeckZone->Deck.Contains(tracedCard))
+		return;
+
+	if(tracedCard->cardOwner == this)
 		SelectedCard = tracedCard;
 }
 
-bool ACardGamePawn::hasSelectedCard()
+void ACardGamePawn::InteractWithTracedZone(APlayZone* tracedZone)
 {
-	if (SelectedCard)
+	//If their was no traced zone, return.
+	if (!tracedZone)
+		return;
+
+	SelectedZone = tracedZone;
+
+	//Cast to a Field Zone
+	AFieldZone* FieldZone = Cast<AFieldZone>(CurrentTracedActor);
+
+	if (FieldZone)
 	{
-		//GEngine->AddOnScreenDebugMessage(-1, 5, FColor::Green, TEXT("Something has opened."));
-		return true;
+		//If the cast was succsessful...
+
+		//If the player has no selected card...
+		if (!SelectedCard)
+		{
+			//If the zone has a card on it, make it the selected card.
+			if (FieldZone->Card)
+				SelectedCard = FieldZone->Card;
+		}
+		////If the currently selected card is in the hand...
+		//else if (Hand.Contains(SelectedCard))
+		//{
+		//	//Place the card onto the zone.
+		//	PlaceCard(FieldZone);
+		//}
+
+		return;
 	}
 
-	return false;
+	//Cast to a Deck Zone
+	ADeckZone* deckZone = Cast<ADeckZone>(CurrentTracedActor);
+
+	if (deckZone)
+	{
+		//If the cast was successful...
+
+		return;
+	}
 }

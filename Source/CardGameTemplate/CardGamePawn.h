@@ -7,6 +7,7 @@
 #include "CardGamePawn.generated.h"
 
 class ACard;
+class APlayZone;
 
 UCLASS()
 class CARDGAMETEMPLATE_API ACardGamePawn : public APawn
@@ -36,8 +37,8 @@ public:
 
 	void OnMouseClick();
 
-	UFUNCTION(BlueprintCallable)
-	bool hasSelectedCard();
+	void InteractWithTracedCard(ACard* tracedCard);
+	void InteractWithTracedZone(APlayZone* tracedZone);
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -55,6 +56,9 @@ public:
 
 	UPROPERTY(EditInstanceOnly, BlueprintReadWrite)
 	ACard* SelectedCard;
+
+	UPROPERTY(EditInstanceOnly, BlueprintReadWrite)
+	APlayZone* SelectedZone;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	class UInventoryComponent* CardInventory;
