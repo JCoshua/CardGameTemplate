@@ -15,6 +15,19 @@ enum class ECardLocation : uint8
 	DiscardPile
 };
 
+USTRUCT()
+struct FCardStats
+{
+	GENERATED_BODY()
+
+	FCardStats(int Health, int Attack, int Defense);
+public:
+	int cardHealth = 1;
+	int cardAttack = 1;
+	int cardDefense = 1;
+
+	void BattleOpponent(FCardStats* target);
+};
 
 UCLASS()
 class CARDGAMETEMPLATE_API ACard : public AActor
@@ -60,6 +73,8 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void CardAttack(ACard* target);
 
+	void SetCardStats();
+
 	UPROPERTY(EditAnywhere)
 	class UStaticMeshComponent* mesh;
 
@@ -70,7 +85,14 @@ public:
 	ECardLocation location;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	class UPrimaryCardDataAsset* cardData;
+	class UPrimaryCardDataAsset* CardData;
+
+	FCardStats* CardStats;
+
+	UPROPERTY(BlueprintReadWrite)
+	bool IsAttacking;
+
+	class AFieldZone* CardZone;
 private:
 	/// <summary>
 	/// Actions performed when this card is added to the hand.

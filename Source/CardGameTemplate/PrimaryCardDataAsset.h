@@ -6,9 +6,6 @@
 #include "Engine/DataAsset.h"
 #include "PrimaryCardDataAsset.generated.h"
 
-/**
- * 
- */
 UCLASS()
 class CARDGAMETEMPLATE_API UPrimaryCardDataAsset : public UPrimaryDataAsset
 {
@@ -18,8 +15,11 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Card Data Info")
 	class ACard* cardObject;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "UI")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Visuals")
 	UTexture2D* texture;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Visuals")
+	UMaterial* material;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Card Data Info")
 	FName cardName;
@@ -37,6 +37,4 @@ public:
 	int Defense = 0;
 
 	FPrimaryAssetId GetPrimaryAssetId() const override;
-
-	void BattleOpponent(UPrimaryCardDataAsset* target);
 };

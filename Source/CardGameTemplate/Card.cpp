@@ -6,6 +6,7 @@
 #include "PrimaryCardDataAsset.h"
 #include "CardGamePawn.h"
 #include "DiscardZone.h"
+#include "FieldZone.h"
 
 // Sets default values
 ACard::ACard()
@@ -18,7 +19,8 @@ ACard::ACard()
 
 	mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
 	mesh->SetStaticMesh(Asset);
-	mesh->SetRelativeScale3D({ 1.5f, 1.0f, 0.01f });
+	mesh->SetRelativeScale3D({ 1.0f, 1.5f, 0.01f });
+	mesh->AddWorldRotation({ 90.0f,90.0f,00.0f });
 	mesh->SetupAttachment(RootComponent);
 }
 
@@ -32,8 +34,11 @@ void ACard::BeginPlay()
 void ACard::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	if (cardData->Health <= 0)
+	if (CardData->Health <= 0 && location == ECardLocation::Field)
+	{
 		cardOwner->DiscardZone->AddToPile(this);
+		CardZone->Card = nullptr;
+	}
 }
 
 void ACard::CardAdded()
@@ -67,7 +72,13 @@ void ACard::CardAttack(ACard* target)
 	if (!target)
 		return;
 
-	cardData->BattleOpponent(target->cardData);
+	CardStats->BattleOpponent(target->CardStats);
+	IsAttacking = false;
+}
+
+void ACard::SetCardStats()
+{
+	CardStats = &FCardStats(CardData->Health, CardData->Attack, CardData->Defense);
 }
 
 void ACard::onCardAdded()
@@ -90,4 +101,24 @@ void ACard::onCardAttack()
 {
 }
 
+FCardStats::FCardStats(int Health, int Attack, int Defense)
+{
+	cardHealth = Health;
+	cardAttack = Attack;
+	cardDefense = Defense;
+}
 
+void FCardStats::BattleOpponent(FCardStats* target)
+{
+	int damage = (target->cardAttack - cardDefense);
+
+	if (damage < 0)
+		damage = 0;
+	cardHealth -= damage;
+
+	damage = (cardAttack - target->cardDefense);
+
+	if (damage < 0)
+		damage = 0;
+	target->cardHealth -= damage;
+}

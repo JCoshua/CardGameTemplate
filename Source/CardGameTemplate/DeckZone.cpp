@@ -15,11 +15,25 @@ void ADeckZone::initDeck()
 	UWorld* world = GetWorld();
 	TArray<UPrimaryCardDataAsset*> ownerDeck = zoneOwner->DeckComponent->DeckArray;
 
+	//For each card asset in the owner's deck
 	for (int i = 0; i < ownerDeck.Num(); i++)
 	{
+		//Create a new card
 		ACard* newCard = world->SpawnActor<ACard>();
-		newCard->cardData = ownerDeck[i];
+
+		//Give the card the deck's asset
+		newCard->CardData = ownerDeck[i];
+
+		//Sets the card's owner
 		newCard->cardOwner = zoneOwner;
+
+		//Set the material on the card.
+		newCard->mesh->SetMaterial(0, ownerDeck[i]->material);
+
+		//Set the new card's stats.
+		newCard->SetCardStats();
+
+		//Add the card to the deck.
 		Deck.Add(newCard);
 	}
 

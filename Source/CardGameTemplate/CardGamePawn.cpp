@@ -184,6 +184,12 @@ void ACardGamePawn::InteractWithTracedCard(ACard* tracedCard)
 	if (DeckZone->Deck.Contains(tracedCard))
 		return;
 
+	if (SelectedCard)
+	{
+		if (SelectedCard->IsAttacking && SelectedCard->cardOwner != tracedCard->cardOwner)
+			SelectedCard->CardAttack(tracedCard);
+	}
+
 	if(tracedCard->cardOwner == this)
 		SelectedCard = tracedCard;
 }
