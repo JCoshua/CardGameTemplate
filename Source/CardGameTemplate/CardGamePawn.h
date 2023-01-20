@@ -49,6 +49,7 @@ public:
 	class UCameraComponent* Camera;
 
 	TArray<ACard*> Hand;
+	TArray<ACard*> CardsOnField;
 	class ADeckZone* DeckZone;
 	class ADiscardZone* DiscardZone;
 

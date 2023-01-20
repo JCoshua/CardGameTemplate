@@ -19,8 +19,7 @@ ACard::ACard()
 
 	mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
 	mesh->SetStaticMesh(Asset);
-	mesh->SetRelativeScale3D({ 1.0f, 1.5f, 0.01f });
-	mesh->AddWorldRotation({ 90.0f,90.0f,00.0f });
+	mesh->SetRelativeScale3D({1.0f, 1.5f, 0.01f});
 	mesh->SetupAttachment(RootComponent);
 }
 
@@ -34,9 +33,9 @@ void ACard::BeginPlay()
 void ACard::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	if (CardData->Health <= 0 && location == ECardLocation::Field)
+	if (CardHealth <= 0 && location == ECardLocation::Field)
 	{
-		cardOwner->DiscardZone->AddToPile(this);
+		CardOwner->DiscardZone->AddToPile(this);
 		CardZone->Card = nullptr;
 	}
 }
@@ -44,6 +43,7 @@ void ACard::Tick(float DeltaTime)
 void ACard::CardAdded()
 {
 	onCardAdded();
+	CardData->CardAdded(this);
 
 	location = ECardLocation::Hand;
 }
@@ -51,11 +51,13 @@ void ACard::CardAdded()
 void ACard::CardUsed()
 {
 	onCardUsed();
+	CardData->CardUsed(this);
 }
 
 void ACard::CardRemoved()
 {
 	onCardRemoved();
+	CardData->CardRemoved(this);
 
 	location = ECardLocation::DiscardPile;
 }
@@ -63,22 +65,46 @@ void ACard::CardRemoved()
 void ACard::CardPlaced()
 {
 	onCardPlaced();
+	CardData->CardPlaced(this);
 
 	location = ECardLocation::Field;
 }
 
-void ACard::CardAttack(ACard* target)
+void ACard::AttackCard(ACard* target)
 {
 	if (!target)
 		return;
 
-	CardStats->BattleOpponent(target->CardStats);
+	if (!target->CardZone)
+		return;
+
+	onCardAttack(target);
+	CardData->AttackCard(this, target);
+	BattleCard(target);
+	target->BattleCard(target);
+
+	CardHealth -= target->CalculateDamage(this);
+	target->CardHealth -= CalculateDamage(target);
+
 	IsAttacking = false;
+	CardOwner->SelectedCard = nullptr;
+	CardOwner->readyForTurnEnd = true;
+
+	CardData->ResetStats(this);
+	target->CardData->ResetStats(target);
+}
+
+void ACard::BattleCard(ACard* target)
+{
+	onCardBattle(target);
+	CardData->BattleCard(this, target);
 }
 
 void ACard::SetCardStats()
 {
-	CardStats = &FCardStats(CardData->Health, CardData->Attack, CardData->Defense);
+	CardHealth = CardData->Health;
+	CardAttack = CardData->Attack;
+	CardDefense = CardData->Defense;
 }
 
 void ACard::onCardAdded()
@@ -97,28 +123,20 @@ void ACard::onCardPlaced()
 {
 }
 
-void ACard::onCardAttack()
+void ACard::onCardAttack(ACard* target)
 {
 }
 
-FCardStats::FCardStats(int Health, int Attack, int Defense)
+void ACard::onCardBattle(ACard* target)
 {
-	cardHealth = Health;
-	cardAttack = Attack;
-	cardDefense = Defense;
 }
 
-void FCardStats::BattleOpponent(FCardStats* target)
+int ACard::CalculateDamage(ACard* target)
 {
-	int damage = (target->cardAttack - cardDefense);
+	int damage = CardAttack - target->CardDefense;
 
-	if (damage < 0)
-		damage = 0;
-	cardHealth -= damage;
+	if (damage <= 0)
+		damage = 1;
 
-	damage = (cardAttack - target->cardDefense);
-
-	if (damage < 0)
-		damage = 0;
-	target->cardHealth -= damage;
+	return damage;
 }

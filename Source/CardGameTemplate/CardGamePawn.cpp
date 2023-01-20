@@ -109,8 +109,8 @@ void ACardGamePawn::SortHandLocation()
 	int handSize = Hand.Num();
 	for (int i = 0; i < handSize; i++)
 	{
-		Hand[i]->SetActorScale3D({0.75f, 0.5f, 0.005f});
-		Hand[i]->SetActorRotation({ 90.0f, 0.0f, 0.0f}	);
+		Hand[i]->SetActorScale3D({0.5f, 0.75f, 0.005f});
+		Hand[i]->SetActorRotation({ 0.0f, 90.0f, 90.0f });
 		
 		float cardYLocation = (-75.0f + (handSize * 5)) + ((55.0f * handSize) / 2);
 		cardYLocation -= (55.0f - (handSize * 0.25f)) * i;
@@ -147,6 +147,7 @@ void ACardGamePawn::PlaceCard(AFieldZone* zone)
 	{
 		Hand.RemoveSingle(SelectedCard);
 		SelectedCard->CardPlaced();
+		CardsOnField.Add(SelectedCard);
 		SelectedCard = nullptr;
 
 		SortHandLocation();
@@ -186,11 +187,11 @@ void ACardGamePawn::InteractWithTracedCard(ACard* tracedCard)
 
 	if (SelectedCard)
 	{
-		if (SelectedCard->IsAttacking && SelectedCard->cardOwner != tracedCard->cardOwner)
-			SelectedCard->CardAttack(tracedCard);
+		if (SelectedCard->IsAttacking && SelectedCard->CardOwner != tracedCard->CardOwner)
+			SelectedCard->AttackCard(tracedCard);
 	}
 
-	if(tracedCard->cardOwner == this)
+	if(tracedCard->CardOwner == this)
 		SelectedCard = tracedCard;
 }
 

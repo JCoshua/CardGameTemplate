@@ -15,20 +15,6 @@ enum class ECardLocation : uint8
 	DiscardPile
 };
 
-USTRUCT()
-struct FCardStats
-{
-	GENERATED_BODY()
-
-	FCardStats(int Health, int Attack, int Defense);
-public:
-	int cardHealth = 1;
-	int cardAttack = 1;
-	int cardDefense = 1;
-
-	void BattleOpponent(FCardStats* target);
-};
-
 UCLASS()
 class CARDGAMETEMPLATE_API ACard : public AActor
 {
@@ -71,24 +57,32 @@ public:
 	/// Actions all cards perform when they attack a target.
 	/// </summary>
 	UFUNCTION(BlueprintCallable)
-	void CardAttack(ACard* target);
+	void AttackCard(ACard* target);
+	/// <summary>
+	/// Actions all cards perform when they battle an opposing card.
+	/// </summary>
+	UFUNCTION(BlueprintCallable)
+	void BattleCard(ACard* target);
 
 	void SetCardStats();
 
 	UPROPERTY(EditAnywhere)
 	class UStaticMeshComponent* mesh;
 
-	UPROPERTY()
-	class ACardGamePawn* cardOwner;
-
 	UPROPERTY(BlueprintReadOnly)
-	ECardLocation location;
-
+	class ACardGamePawn* CardOwner;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	class UPrimaryCardDataAsset* CardData;
 
-	FCardStats* CardStats;
+	UPROPERTY(BlueprintReadOnly)
+	int CardHealth = 1;
+	UPROPERTY(BlueprintReadOnly)
+	int CardAttack = 1;
+	UPROPERTY(BlueprintReadOnly)
+	int CardDefense = 1;
 
+	UPROPERTY(BlueprintReadOnly)
+	ECardLocation location;
 	UPROPERTY(BlueprintReadWrite)
 	bool IsAttacking;
 
@@ -113,5 +107,11 @@ private:
 	/// <summary>
 	/// Actions performed when this card attacks a target.
 	/// </summary>
-	virtual void onCardAttack();
+	virtual void onCardAttack(ACard* target);
+	/// <summary>
+	/// Actions performed when this card battles an opposing card.
+	/// </summary>
+	virtual void onCardBattle(ACard* target);
+
+	int CalculateDamage(ACard* target);
 };

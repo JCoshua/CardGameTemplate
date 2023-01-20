@@ -25,13 +25,15 @@ void ADeckZone::initDeck()
 		newCard->CardData = ownerDeck[i];
 
 		//Sets the card's owner
-		newCard->cardOwner = zoneOwner;
+		newCard->CardOwner = zoneOwner;
 
 		//Set the material on the card.
 		newCard->mesh->SetMaterial(0, ownerDeck[i]->material);
 
 		//Set the new card's stats.
 		newCard->SetCardStats();
+
+		ownerDeck[i]->cardObject = newCard;
 
 		//Add the card to the deck.
 		Deck.Add(newCard);
@@ -58,6 +60,7 @@ void ADeckZone::Shuffle()
 	for (int i = Deck.Num() - 1; i >= 0; i--)
 	{
 		Deck[j]->SetActorLocation(GetActorLocation() + FVector(0.0f, 0.0f, (i * 1.0f) + 1.0));
+		Deck[j]->SetActorRotation({ 0.0f, 90.0f, 0.0f });
 		j++;
 	}
 }

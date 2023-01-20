@@ -46,6 +46,7 @@ public:
 	/// <summary>
 	/// The Current Turn Player
 	/// </summary>
+	UPROPERTY(BlueprintReadOnly)
 	ACardGamePawn* currentPlayer;
 
 	UTurnPhases currentPhase;
