@@ -38,6 +38,7 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void InitializeGame();
 	void InitializeDecks();
+	void CheckForWinner();
 
 	UPROPERTY(EditAnywhere)
 	ACardGamePawn* playerOne;
@@ -59,4 +60,9 @@ public:
 
 	UPROPERTY(BlueprintReadWrite)
 	bool gameStart = false;
+
+	UPROPERTY(BlueprintReadOnly)
+	ACardGamePawn* WinPlayer;
+	UPROPERTY(BlueprintReadOnly)
+	bool gameWin = false;
 };

@@ -6,6 +6,7 @@
 #include <Camera/CameraComponent.h>
 #include "CardGamePawn.h"
 #include "DeckZone.h"
+#include "DiscardZone.h"
 #include "Card.h"
 
 
@@ -72,6 +73,8 @@ void UCardGameManager::TickComponent(float DeltaTime, ELevelTick TickType, FActo
 	default:
 		break;
 	}
+
+	CheckForWinner();
 }
 
 void UCardGameManager::InitializeGame()
@@ -98,5 +101,19 @@ void UCardGameManager::InitializeDecks()
 {
 	playerOne->DeckZone->initDeck();
 	playerTwo->DeckZone->initDeck();
+}
+
+void UCardGameManager::CheckForWinner()
+{
+	if (playerOne->DiscardZone->DiscardPile.Num() >= 10)
+	{
+		WinPlayer = playerTwo;
+		gameWin = true;
+	}
+	else if (playerTwo->DiscardZone->DiscardPile.Num() >= 10)
+	{
+		WinPlayer = playerOne;
+		gameWin = true;
+	}
 }
 
