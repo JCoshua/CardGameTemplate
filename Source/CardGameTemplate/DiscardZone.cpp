@@ -24,6 +24,8 @@ void ADiscardZone::AddToPile(ACard* card)
 	{
 		DiscardPile[i]->SetActorLocation(GetActorLocation() + FVector(0.0f, 0.0f, (i * 1.0f) + 1.0));
 		DiscardPile[i]->SetActorRotation({ 0.0f, 90.0f, 0.0f });
+		if(zoneOwner->GetActorLocation().X > 0)
+			DiscardPile[i]->SetActorRotation({ 0.0f, 270.0f, 0.0f });
 		card->location = ECardLocation::DiscardPile;
 	}
 }

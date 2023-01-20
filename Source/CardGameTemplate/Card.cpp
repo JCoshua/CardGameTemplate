@@ -58,6 +58,7 @@ void ACard::CardRemoved()
 {
 	onCardRemoved();
 	CardData->CardRemoved(this);
+	CardZone->Card = nullptr;
 
 	location = ECardLocation::DiscardPile;
 }

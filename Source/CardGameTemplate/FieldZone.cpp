@@ -16,7 +16,11 @@ bool AFieldZone::PlaceCard(ACard* cardToPlace)
 	Card = cardToPlace;
 	Card->SetActorLocation(GetActorLocation() + FVector(0.0f, 0.0f, 1.0f));
 	Card->SetActorScale3D(Card->GetActorScale3D() * 2);
+
 	Card->SetActorRotation({ 0.0f, 90.0f, 0.0f });
+	if (zoneOwner->GetActorLocation().X > 0)
+		Card->SetActorRotation({ 0.0f, 270.0f, 0.0f });
+
 	Card->CardZone = this;
 
 	return true;
