@@ -4,7 +4,6 @@
 #include "CardGameManager.h"
 #include "CardGameTemplatePlayerController.h"
 #include <Camera/CameraComponent.h>
-#include "CardGameTemplatePawn.h"
 #include "CardGamePawn.h"
 #include "DeckZone.h"
 #include "Card.h"
@@ -29,6 +28,7 @@ void UCardGameManager::BeginPlay()
 	// ...
 	UWorld* world = GetWorld();
 
+	//Possesses player 1
 	playerOne->AutoPossessPlayer = EAutoReceiveInput::Player0;
 	world->GetFirstPlayerController()->Possess(playerOne);
 }
@@ -39,26 +39,41 @@ void UCardGameManager::TickComponent(float DeltaTime, ELevelTick TickType, FActo
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
+	//Do nothing if the game hasn't started
 	if (!gameStart)
 		return;
 
 	UWorld* world = GetWorld();
 
-	// ...
 	switch (currentPhase)
 	{
+	//During the Draw Phase...
 	case UTurnPhases::DRAWPHASE:
+		//The current player draws their card...
 		currentPlayer->DrawCard(cardDrawnPerTurn);
+
+		//Switch to the main phase.
 		currentPhase = UTurnPhases::MAINPHASE;
 		break;
+
+	//During the Main Phase
 	case UTurnPhases::MAINPHASE:
+
+		//When the player is ready to end their turn...
 		if (currentPlayer->readyForTurnEnd)
 		{
+			//Switch to the end phase...
 			currentPhase = UTurnPhases::ENDPHASE;
+
+			//Reset the variable.
 			currentPlayer->readyForTurnEnd = false;
 		}
 		break;
+
+	//During the End Phase
 	case UTurnPhases::ENDPHASE:
+
+		//Switch the turn player...
 		currentPlayer->isTurnPlayer = false;
 		if (currentPlayer == playerOne)
 			currentPlayer = playerTwo;
@@ -66,10 +81,14 @@ void UCardGameManager::TickComponent(float DeltaTime, ELevelTick TickType, FActo
 			currentPlayer = playerOne;
 		currentPlayer->isTurnPlayer = true;
 
+		//Possess the new turn player (for testing purposes)...
 		world->GetFirstPlayerController()->UnPossess();
 		world->GetFirstPlayerController()->Possess(currentPlayer);
+
+		//Return to the Draw Phase.
 		currentPhase = UTurnPhases::DRAWPHASE;
 		break;
+
 	default:
 		break;
 	}
@@ -77,14 +96,19 @@ void UCardGameManager::TickComponent(float DeltaTime, ELevelTick TickType, FActo
 
 void UCardGameManager::InitializeGame()
 {
+	//Give the players possession of their pawns...
 	UWorld* world = GetWorld();
 	playerOne->AutoPossessPlayer = EAutoReceiveInput::Player0;
 	playerTwo->AutoPossessPlayer = EAutoReceiveInput::Player1;
+
+	//Initialize their decks...
 	InitializeDecks();
 
+	//Each player Draws their opening hand...
 	playerOne->DrawCard(5);
 	playerTwo->DrawCard(5);
 
+	//The first turn player is randomly decided...
 	if (rand() % 2 == 0)
 		currentPlayer = playerOne;
 	else
@@ -92,12 +116,13 @@ void UCardGameManager::InitializeGame()
 	world->GetFirstPlayerController()->Possess(currentPlayer);
 	currentPlayer->isTurnPlayer = true;
 
+	//The game starts
 	gameStart = true;
 }
 
 void UCardGameManager::InitializeDecks()
 {
-	playerOne->DeckZone->initDeck();
-	playerTwo->DeckZone->initDeck();
+	playerOne->DeckZone->InitializeDeck();
+	playerTwo->DeckZone->InitializeDeck();
 }
 

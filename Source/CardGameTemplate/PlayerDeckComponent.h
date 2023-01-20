@@ -25,12 +25,21 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
+	/// <summary>
+	/// Adds the card asset to the deck.
+	/// </summary>
 	UFUNCTION(BlueprintCallable)
 	void AddCardToDeck(class UPrimaryCardDataAsset* card);
 
+	/// <summary>
+	/// Removes the card asset from the deck.
+	/// </summary>
 	UFUNCTION(BlueprintCallable)
 	void RemoveCardFromDeck(class UPrimaryCardDataAsset* card);
 
+	/// <summary>
+	/// The array of cards in the deck.
+	/// </summary>
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	TArray<UPrimaryCardDataAsset*> DeckArray;
 

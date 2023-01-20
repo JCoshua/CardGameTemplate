@@ -4,6 +4,7 @@
 #include "Card.h"
 #include <Components/StaticMeshComponent.h>
 #include "PrimaryCardDataAsset.h"
+#include "FieldZone.h"
 
 // Sets default values
 ACard::ACard()
@@ -14,10 +15,10 @@ ACard::ACard()
 	static ConstructorHelpers::FObjectFinder<UStaticMesh>MeshAsset(TEXT("StaticMesh'/Engine/BasicShapes/Cube.Cube'"));
 	UStaticMesh* Asset = MeshAsset.Object;
 
-	mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
-	mesh->SetStaticMesh(Asset);
-	mesh->SetRelativeScale3D({ 1.5f, 1.0f, 0.01f });
-	mesh->SetupAttachment(RootComponent);
+	CardMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
+	CardMesh->SetStaticMesh(Asset);
+	CardMesh->SetRelativeScale3D({ 1.0f, 1.5f, 0.01f });
+	CardMesh->SetupAttachment(RootComponent);
 }
 
 // Called when the game starts or when spawned
@@ -30,32 +31,38 @@ void ACard::BeginPlay()
 void ACard::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+	CardZone->Card = nullptr;
 }
 
 void ACard::CardAdded()
 {
 	onCardAdded();
+	CardData->CardAdded(this);
 
-	location = ECardLocation::Hand;
+	Location = ECardLocation::Hand;
 }
 
 void ACard::CardUsed()
 {
 	onCardUsed();
+	CardData->CardUsed(this);
 }
 
 void ACard::CardRemoved()
 {
 	onCardRemoved();
+	CardData->CardRemoved(this);
 
-	location = ECardLocation::DiscardPile;
+	Location = ECardLocation::DiscardPile;
 }
 
 void ACard::CardPlaced()
 {
 	onCardPlaced();
+	CardData->CardPlaced(this);
 
-	location = ECardLocation::Field;
+	Location = ECardLocation::Field;
 }
 
 void ACard::onCardAdded()

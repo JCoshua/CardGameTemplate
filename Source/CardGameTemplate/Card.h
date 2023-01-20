@@ -56,16 +56,27 @@ public:
 	void CardPlaced();
 
 	UPROPERTY(EditAnywhere)
-	class UStaticMeshComponent* mesh;
+	class UStaticMeshComponent* CardMesh;
 
-	UPROPERTY()
-	class ACardGamePawn* cardOwner;
+	/// <summary>
+	/// The data the card will reference.
+	/// </summary>
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	class UPrimaryCardDataAsset* CardData;
+
+	/// <summary>
+	/// The player that owns this card.
+	/// </summary>
+	UPROPERTY(BlueprintReadOnly)
+	class ACardGamePawn* CardOwner;
+
+	/// <summary>
+	/// The Zone this card is placed on, if any.
+	/// </summary>
+	class AFieldZone* CardZone;
 
 	UPROPERTY(BlueprintReadOnly)
-	ECardLocation location;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	class UPrimaryCardDataAsset* cardData;
+	ECardLocation Location;
 private:
 	/// <summary>
 	/// Actions performed when this card is added to the hand.

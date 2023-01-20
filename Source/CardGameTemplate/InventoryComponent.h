@@ -25,11 +25,21 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
+	/// <summary>
+	/// Adds the card to the inventory.
+	/// </summary>
 	UFUNCTION(BlueprintCallable)
 	void AddCardToInventory(UPrimaryCardDataAsset* card, int cardCount = 1);
+
+	/// <summary>
+	/// Removes the card from the inventory.
+	/// </summary>
 	UFUNCTION(BlueprintCallable)
 	void RemoveCardFromInventory(UPrimaryCardDataAsset* card);
 
+	/// <summary>
+	/// The array of cards in the inventory.
+	/// </summary>
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	TArray<UPrimaryCardDataAsset*> inventoryArray;
 

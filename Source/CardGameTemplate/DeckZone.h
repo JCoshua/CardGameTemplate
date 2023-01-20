@@ -15,9 +15,19 @@ class CARDGAMETEMPLATE_API ADeckZone : public APlayZone
 	GENERATED_BODY()
 	
 public:
-	void initDeck();
+	/// <summary>
+	/// Initializes the owner's deck.
+	/// </summary>
+	void InitializeDeck();
+
+	/// <summary>
+	/// Shuffles the deck.
+	/// </summary>
 	void Shuffle();
 
+	/// <summary>
+	/// The array of cards located in the deck.
+	/// </summary>
 	UPROPERTY(EditAnywhere)
 	TArray<class ACard*> Deck;
 

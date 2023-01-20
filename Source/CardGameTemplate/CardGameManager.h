@@ -35,17 +35,26 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
+	/// <summary>
+	/// Initializes the players, field and decks.
+	/// </summary>
 	UFUNCTION(BlueprintCallable)
 	void InitializeGame();
+
+	/// <summary>
+	/// Creates the decks of both players.
+	/// </summary>
 	void InitializeDecks();
 
 	UPROPERTY(EditAnywhere)
 	ACardGamePawn* playerOne;
 	UPROPERTY(EditAnywhere)
 	ACardGamePawn* playerTwo;
+
 	/// <summary>
 	/// The Current Turn Player
 	/// </summary>
+	UPROPERTY(BlueprintReadOnly)
 	ACardGamePawn* currentPlayer;
 
 	UTurnPhases currentPhase;
@@ -56,6 +65,9 @@ public:
 	UPROPERTY(EditAnywhere)
 	int cardDrawnPerTurn = 1;
 
+	/// <summary>
+	/// Whether the game has started yet.
+	/// </summary>
 	UPROPERTY(BlueprintReadWrite)
 	bool gameStart = false;
 };

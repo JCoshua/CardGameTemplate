@@ -23,7 +23,14 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	/// <summary>
+	/// The player that owns this zone.
+	/// </summary>
 	UPROPERTY(EditAnywhere)
-	class ACardGamePawn* zoneOwner;
+	class ACardGamePawn* ZoneOwner;
+
+	/// <summary>
+	/// The visible mesh of this zone.
+	/// </summary>
 	class UStaticMeshComponent* mesh;
 };
